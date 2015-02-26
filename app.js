@@ -19,10 +19,15 @@ io.on('connection', function(socket){
 
 http.listen(3000, function(){
   console.log('listening on *:3000');
-  updateValues();
+  sendNewValue();
 });
 
-function updateValues(){
-  io.emit('values', values);
-  setTimeout(updateValues, 1000);
+function sendNewValue(){
+  value = updateRandomValue();
+  io.emit('values', value);
+  setTimeout(sendNewValue, 1000);
+}
+
+function updateRandomValue(){
+  return values;
 }

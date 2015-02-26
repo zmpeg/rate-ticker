@@ -29,5 +29,7 @@ function sendNewValue(){
 }
 
 function updateRandomValue(){
-  return values;
+  index = Math.floor(Math.random() * values.length)
+  value = values[index]
+  return value;
 }

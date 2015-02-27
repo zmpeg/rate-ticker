@@ -31,7 +31,7 @@ function sendNewValue(){
 function updateRandomValue(){
   index = Math.floor(Math.random() * values.length);
   value = values[index];
-  change = Math.random() < 0.5 ? -0.1 : 0.1;
+  change = Math.random() < 0.5 ? 0 : (Math.random() < 0.5 ? -0.1 : 0.1);
   value.value = Math.floor((value.value + change)*10)/10;
   return value;
 }

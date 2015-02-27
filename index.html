@@ -23,6 +23,11 @@
       console.log(_rates);
       this.rates(_rates);
     }
+    this.find = function(name) {
+      return this.rates().filter(function(r) {
+        return r.name == name;
+      })[0];
+    };
   }
 
   rateListVM = new RateListViewModel();
@@ -31,6 +36,10 @@
   socket.on('values', function(values) {
     rateListVM.loadRates(values);
   });
+  socket.on('value', function(rate) {
+    rateListVM.find(rate.name).rate(rate.value);
+  });
+
 
   ko.applyBindings(rateListVM);
 </script>

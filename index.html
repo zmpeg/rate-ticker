@@ -1,8 +1,27 @@
-<h1>Hello World</h1>
+<h1>Rates</h1>
+<ul data-bind="foreach: items">
+  <li>item</li>
+</ul>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/knockout/3.3.0/knockout-min.js"></script>
 <script src="/socket.io/socket.io.js"></script>
 <script>
+  var RateListViewModel = function() {
+    this.items = ko.observableArray([]);
+    this.addItem = function(item) {
+      this.items.push(item);
+    }.bind(this);
+    this.loadItems = function(items) {
+      this.items(items);
+    }
+  }
+
+  rateListVM = new RateListViewModel();
+
   var socket = io();
   socket.on('values', function(values) {
     console.log(values);
+    rateListVM.loadItems(values);
   });
+
+  ko.applyBindings(rateListVM);
 </script>

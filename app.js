@@ -24,7 +24,7 @@ http.listen(3000, function(){
 
 function sendNewValue(){
   value = updateRandomValue();
-  io.emit('values', value);
+  io.emit('value', value);
   setTimeout(sendNewValue, 1000);
 }
 

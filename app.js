@@ -17,8 +17,8 @@ io.on('connection', function(socket){
   io.emit('values', values);
 });
 
-http.listen(3000, function(){
-  console.log('listening on *:3000');
+http.listen(3001, function(){
+  console.log('listening on *:3001');
   sendNewValue();
 });
 

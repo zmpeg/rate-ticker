@@ -16,6 +16,11 @@
   var RateListViewModel = function() {
     this.title = "Rates"
     this.rates = ko.observableArray([]);
+    this.sortRates = function() {
+      this.rates.sort(function(a, b) {
+        return a.rate() == b.rate() ? 0 : (a.rate() < b.rate() ? -1 : 1);
+      });
+    };
     this.loadRates = function(rates) {
       _rates = rates.map(function(v,i) {
         return new Rate(v.name, v.value);
@@ -30,7 +35,7 @@
     };
   }
 
-  rateListVM = new RateListViewModel();
+  var rateListVM = new RateListViewModel();
 
   var socket = io();
   socket.on('values', function(values) {
@@ -38,6 +43,7 @@
   });
   socket.on('value', function(rate) {
     rateListVM.find(rate.name).rate(rate.value);
+    rateListVM.sortRates();
   });
 
 

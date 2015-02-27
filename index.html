@@ -1,16 +1,39 @@
 <h1 data-bind="text: title"></h1>
 <ul data-bind="foreach: rates">
-  <li data-bind="text: text"></li>
+  <li data-bind="text: text, css: { highlight: changed }"></li>
 </ul>
+<style type="text/css">
+  .highlight {
+    background-color: yellow;
+  }
+</style>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/knockout/3.3.0/knockout-min.js"></script>
 <script src="/socket.io/socket.io.js"></script>
 <script>
+  ko.subscribable.fn.subscribeChanged = function (callback) {
+    var oldValue;
+    this.subscribe(function (_oldValue) {
+      oldValue = _oldValue;
+    }, this, 'beforeChange');
+
+    this.subscribe(function (newValue) {
+      callback(newValue, oldValue);
+    });
+  };
+
   var Rate = function(name, rate) {
     this.name = name;
     this.rate = ko.observable(rate);
+    this.changed = ko.observable(false)
     this.text = ko.computed(function() {
       return this.name + ": " + this.rate();
     }, this);
+    this.rate.subscribeChanged(function(newValue, oldValue) {
+      if(newValue != oldValue) {
+        this.changed(true);
+        setTimeout(function() { this.changed(false); }.bind(this), 500)
+      }
+    }.bind(this));
   }
 
   var RateListViewModel = function() {

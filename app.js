@@ -16,6 +16,14 @@ app.get('/foundation.min.css', function(req, res){
   res.sendFile(__dirname + '/foundation.min.css');
 });
 
+app.get('/foundation.min.js', function(req, res){
+  res.sendFile(__dirname + '/foundation.min.js');
+});
+
+app.get('/jquery.min.js', function(req, res){
+  res.sendFile(__dirname + '/jquery-2.1.3.min.js');
+});
+
 io.on('connection', function(socket){
   io.emit('values', values);
 });

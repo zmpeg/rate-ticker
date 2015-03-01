@@ -1,74 +1,84 @@
-<h1 data-bind="text: title"></h1>
-<ul data-bind="foreach: rates">
-  <li data-bind="text: text, css: { highlight: changed }"></li>
-</ul>
-<style type="text/css">
-  .highlight {
-    background-color: yellow;
-  }
-</style>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/knockout/3.3.0/knockout-min.js"></script>
-<script src="/socket.io/socket.io.js"></script>
-<script>
-  ko.subscribable.fn.subscribeChanged = function (callback) {
-    var oldValue;
-    this.subscribe(function (_oldValue) {
-      oldValue = _oldValue;
-    }, this, 'beforeChange');
-
-    this.subscribe(function (newValue) {
-      callback(newValue, oldValue);
-    });
-  };
-
-  var Rate = function(name, rate) {
-    this.name = name;
-    this.rate = ko.observable(rate);
-    this.changed = ko.observable(false)
-    this.text = ko.computed(function() {
-      return this.name + ": " + this.rate();
-    }, this);
-    this.rate.subscribeChanged(function(newValue, oldValue) {
-      if(newValue != oldValue) {
-        this.changed(true);
-        setTimeout(function() { this.changed(false); }.bind(this), 500)
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>rate-ticker</title>
+    <style type="text/css">
+      .highlight {
+        background-color: yellow;
       }
-    }.bind(this));
-  }
+    </style>
+  </head>
+  <body>
+    <h1 data-bind="text: title"></h1>
+    <ul data-bind="foreach: rates">
+      <li data-bind="text: text, css: { highlight: changed }"></li>
+    </ul>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/knockout/3.3.0/knockout-min.js"></script>
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+      ko.subscribable.fn.subscribeChanged = function (callback) {
+        var oldValue;
+        this.subscribe(function (_oldValue) {
+          oldValue = _oldValue;
+        }, this, 'beforeChange');
 
-  var RateListViewModel = function() {
-    this.title = "Rates"
-    this.rates = ko.observableArray([]);
-    this.sortRates = function() {
-      this.rates.sort(function(a, b) {
-        return a.rate() == b.rate() ? 0 : (a.rate() < b.rate() ? -1 : 1);
+        this.subscribe(function (newValue) {
+          callback(newValue, oldValue);
+        });
+      };
+
+      var Rate = function(name, rate) {
+        this.name = name;
+        this.rate = ko.observable(rate);
+        this.changed = ko.observable(false)
+        this.text = ko.computed(function() {
+          return this.name + ": " + this.rate();
+        }, this);
+        this.rate.subscribeChanged(function(newValue, oldValue) {
+          if(newValue != oldValue) {
+            this.changed(true);
+            setTimeout(function() { this.changed(false); }.bind(this), 500)
+          }
+        }.bind(this));
+      }
+
+      var RateListViewModel = function() {
+        this.title = "Rates"
+        this.rates = ko.observableArray([]);
+        this.sortRates = function() {
+          this.rates.sort(function(a, b) {
+            return a.rate() == b.rate() ? 0 : (a.rate() < b.rate() ? -1 : 1);
+          });
+        };
+        this.loadRates = function(rates) {
+          _rates = rates.map(function(v,i) {
+            return new Rate(v.name, v.value);
+          });
+          console.log(_rates);
+          this.rates(_rates);
+        }
+        this.find = function(name) {
+          return this.rates().filter(function(r) {
+            return r.name == name;
+          })[0];
+        };
+      }
+
+      var rateListVM = new RateListViewModel();
+
+      var socket = io();
+      socket.on('values', function(values) {
+        rateListVM.loadRates(values);
       });
-    };
-    this.loadRates = function(rates) {
-      _rates = rates.map(function(v,i) {
-        return new Rate(v.name, v.value);
+      socket.on('value', function(rate) {
+        rateListVM.find(rate.name).rate(rate.value);
+        rateListVM.sortRates();
       });
-      console.log(_rates);
-      this.rates(_rates);
-    }
-    this.find = function(name) {
-      return this.rates().filter(function(r) {
-        return r.name == name;
-      })[0];
-    };
-  }
-
-  var rateListVM = new RateListViewModel();
-
-  var socket = io();
-  socket.on('values', function(values) {
-    rateListVM.loadRates(values);
-  });
-  socket.on('value', function(rate) {
-    rateListVM.find(rate.name).rate(rate.value);
-    rateListVM.sortRates();
-  });
 
 
-  ko.applyBindings(rateListVM);
-</script>
+      ko.applyBindings(rateListVM);
+    </script>
+  </body>
+</html>

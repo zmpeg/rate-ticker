@@ -12,10 +12,21 @@
     </style>
   </head>
   <body>
-    <nav class="tab-bar">
-      <div class="left-small menu-icon"><span></span></div>
-      <div class="middle tab-bar-section" data-bind="text: title"></div>
-    </nav>
+    <div class="off-canvas-wrap">
+      <div class="inner-wrap">
+        <nav class="tab-bar">
+          <section class="left-small">
+            <a href="#" class="left-off-canvas-toggle menu-icon">
+              <span></span>
+            </a>
+          </section>
+          <section class="middle tab-bar-section">
+            <h1 class="title" data-bind="text: title"></h1>
+          </section>
+        </nav>
+      </div>
+
+    </div>
     <ul data-bind="foreach: rates">
       <li data-bind="text: text, css: { highlight: changed }"></li>
     </ul>

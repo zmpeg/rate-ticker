@@ -24,12 +24,15 @@
             <h1 class="title" data-bind="text: title"></h1>
           </section>
         </nav>
+
+        <section class="main-section">
+          <ul data-bind="foreach: rates">
+            <li data-bind="text: text, css: { highlight: changed }"></li>
+          </ul>
+        </section>
       </div>
 
     </div>
-    <ul data-bind="foreach: rates">
-      <li data-bind="text: text, css: { highlight: changed }"></li>
-    </ul>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/knockout/3.3.0/knockout-min.js"></script>
     <script src="/socket.io/socket.io.js"></script>
     <script>

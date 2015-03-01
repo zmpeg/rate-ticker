@@ -12,7 +12,10 @@
     </style>
   </head>
   <body>
-    <h1 data-bind="text: title"></h1>
+    <nav class="tab-bar">
+      <div class="left-small menu-icon"><span></span></div>
+      <div class="middle tab-bar-section" data-bind="text: title"></div>
+    </nav>
     <ul data-bind="foreach: rates">
       <li data-bind="text: text, css: { highlight: changed }"></li>
     </ul>

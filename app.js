@@ -12,6 +12,10 @@ app.get('/', function(req, res){
   res.sendFile(__dirname + '/index.html');
 });
 
+app.get('/foundation.min.css', function(req, res){
+  res.sendFile(__dirname + '/foundation.min.css');
+});
+
 io.on('connection', function(socket){
   console.log('a user connected');
   io.emit('values', values);

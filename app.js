@@ -17,7 +17,6 @@ app.get('/foundation.min.css', function(req, res){
 });
 
 io.on('connection', function(socket){
-  console.log('a user connected');
   io.emit('values', values);
 });
 

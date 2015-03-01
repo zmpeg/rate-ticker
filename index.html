@@ -108,7 +108,10 @@
       });
 
 
-      ko.applyBindings(rateListVM);
+      $(function() {
+        ko.applyBindings(rateListVM);
+        $(document).foundation();
+      });
     </script>
   </body>
 </html>

@@ -42,6 +42,7 @@
         </aside>
 
         <section class="main-section">
+          <p>A single page app that lets you watch some live rates as they (randomly) change. The rates are highlighted when they are updated and sorted.</p>
           <ul data-bind="foreach: rates">
             <li data-bind="text: text, css: { highlight: changed }"></li>
           </ul>

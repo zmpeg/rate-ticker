@@ -26,6 +26,15 @@ app.get('/jquery.min.js', function(req, res){
 
 io.on('connection', function(socket){
   io.emit('values', values);
+
+  socket.on('reset', function(){
+    values = [
+      { name: 'AAA', value: 12.0 },
+      { name: 'BBB', value: 12.1 },
+      { name: 'CCC', value: 11.9 }
+    ];
+    socket.emit('values', values);
+  });
 });
 
 http.listen(3001, function(){

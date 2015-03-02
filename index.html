@@ -56,6 +56,8 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/knockout/3.3.0/knockout-min.js"></script>
     <script src="/socket.io/socket.io.js"></script>
     <script>
+      var socket = io();
+
       ko.subscribable.fn.subscribeChanged = function (callback) {
         var oldValue;
         this.subscribe(function (_oldValue) {
@@ -102,15 +104,15 @@
           })[0];
         };
         this.reset = function() {
-          alert('reset');
+          socket.emit('reset');
         };
       }
 
       var rateListVM = new RateListViewModel();
 
-      var socket = io();
       socket.on('values', function(values) {
         rateListVM.loadRates(values);
+        rateListVM.sortRates();
       });
       socket.on('value', function(rate) {
         rateListVM.find(rate.name).rate(rate.value);

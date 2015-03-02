@@ -32,7 +32,7 @@
           <ul class="off-canvas-list">
             <li><label>Actions</label></li>
             <li>
-              <a href="#">Reset</a>
+              <a href="#" data-bind="click: reset">Reset</a>
             </li>
             <li><label>Links</label></li>
             <li>
@@ -100,6 +100,9 @@
           return this.rates().filter(function(r) {
             return r.name == name;
           })[0];
+        };
+        this.reset = function() {
+          alert('reset');
         };
       }
 

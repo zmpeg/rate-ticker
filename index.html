@@ -12,6 +12,35 @@
       .highlight {
         background-color: yellow;
       }
+      ul#rates {
+        list-style-type: none;
+        margin-left: 0px;
+      }
+      ul#rates li {
+        background-color: #eeeeee;
+        color: #666;
+        margin: 0.7rem;
+      }
+      ul#rates li span.name {
+        display:inline-block;
+        padding: 8px;
+        font-size:18pt;
+      }
+      ul#rates li span.rate {
+        display:inline-block;
+        padding: 8px;
+        font-size:36pt;
+        float:right;
+        background-color:#999;
+        width:75%;
+        text-align:right;
+        color:#333;
+      }
+      ul#rates li:after {
+        content: "";
+        display: table;
+        clear: both;
+      }
     </style>
   </head>
   <body>
@@ -43,8 +72,11 @@
 
         <section class="main-section">
           <p>A single page app that lets you watch some live rates as they (randomly) change. The rates are highlighted when they are updated and sorted.</p>
-          <ul data-bind="foreach: rates">
-            <li data-bind="text: text, css: { highlight: changed }"></li>
+          <ul id="rates" data-bind="foreach: rates">
+            <li data-bind="css: { highlight: changed }">
+              <span class='name' data-bind="text: name"></span>
+              <span class='rate' data-bind="text: rate"></span>
+            </li>
           </ul>
         </section>
 
